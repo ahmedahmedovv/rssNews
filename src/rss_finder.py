@@ -259,16 +259,52 @@ class RSSFinder:
                     
                     # Common Polish date formats
                     date_formats = [
+                        # Standard Formats
                         '%a, %d %b %Y %H:%M:%S %z',      # RFC 822
                         '%Y-%m-%dT%H:%M:%S%z',           # ISO 8601
-                        '%Y-%m-%d %H:%M:%S',
-                        '%d.%m.%Y %H:%M:%S',             # Polish format
-                        '%d.%m.%Y %H:%M',                # Polish format without seconds
+                        '%Y-%m-%dT%H:%M:%SZ',            # ISO 8601 UTC
+                        '%Y-%m-%dT%H:%M:%S.%f%z',        # ISO 8601 with microseconds
+                        '%Y-%m-%dT%H:%M:%S.%fZ',         # ISO 8601 UTC with microseconds
+                        
+                        # Common International Formats
+                        '%Y-%m-%d %H:%M:%S',             # International standard
+                        '%d-%m-%Y %H:%M:%S',             # European style
+                        '%m/%d/%Y %H:%M:%S',             # US style
+                        '%Y/%m/%d %H:%M:%S',             # Asian style
+                        
+                        # Variations without seconds
                         '%Y-%m-%d %H:%M',
-                        '%d %B %Y %H:%M',                # Polish month names
-                        '%d %b %Y %H:%M:%S %z',
                         '%d-%m-%Y %H:%M',
-                        '%d/%m/%Y %H:%M'
+                        '%m/%d/%Y %H:%M',
+                        '%Y/%m/%d %H:%M',
+                        
+                        # European Formats
+                        '%d.%m.%Y %H:%M:%S',             # German/Polish/Russian
+                        '%d.%m.%Y %H:%M',                # German/Polish/Russian without seconds
+                        '%d/%m/%Y %H:%M:%S',             # British/French
+                        '%d/%m/%Y %H:%M',                # British/French without seconds
+                        
+                        # With Month Names
+                        '%d %B %Y %H:%M:%S',             # Full month name
+                        '%d %b %Y %H:%M:%S',             # Abbreviated month name
+                        '%B %d, %Y %H:%M:%S',            # US style with month name
+                        '%b %d, %Y %H:%M:%S',            # US style with abbreviated month
+                        
+                        # Additional Timezone Formats
+                        '%a %b %d %H:%M:%S %Y %z',       # Unix style
+                        '%a %b %d %H:%M:%S %Z %Y',       # Alternative Unix style
+                        '%Y-%m-%d %H:%M:%S %z',          # ISO with space
+                        '%Y-%m-%d %H:%M:%S %Z',          # ISO with timezone name
+                        
+                        # Compact Formats
+                        '%Y%m%d%H%M%S',                  # Basic compact
+                        '%Y%m%d %H%M%S',                 # Compact with space
+                        
+                        # RSS Common Formats
+                        '%a, %d %b %Y %H:%M:%S GMT',
+                        '%a, %d %b %Y %H:%M:%S +0000',
+                        '%a, %d %b %Y %H:%M:%S PST',
+                        '%a, %d %b %Y %H:%M:%S EST'
                     ]
                     
                     # Try all possible date fields
