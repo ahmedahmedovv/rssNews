@@ -21,9 +21,12 @@ class RSSFinder:
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
-        # Create base output directory with today's date
+        # Get project root directory (one level up from src)
+        self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        
+        # Create base output directory with today's date in project root
         self.today = datetime.now().strftime('%Y%m%d')
-        self.base_output_dir = f'rss_outputs_{self.today}'
+        self.base_output_dir = os.path.join(self.project_root, f'rss_outputs_{self.today}')
         if not os.path.exists(self.base_output_dir):
             os.makedirs(self.base_output_dir)
         
