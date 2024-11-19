@@ -106,10 +106,14 @@ class RSSFinder:
         return url
 
     def process_urls_from_file(self, filename='websites.txt'):
+        # Get the absolute path to the data directory
+        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        filename = os.path.join(current_dir, 'data', filename)
+        
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 # Clean URLs while reading and remove any trailing commas
-                urls = [self.clean_url(line.strip().rstrip(',')) for line in file if line.strip()]
+                urls = [self.clean_url(line.strip()) for line in file if line.strip() and not line.startswith('#')]
             
             print(f"\nFound {len(urls)} websites to process")
             processed_sites = {}
