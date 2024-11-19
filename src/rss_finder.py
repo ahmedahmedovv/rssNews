@@ -192,10 +192,10 @@ class RSSFinder:
         url = url.strip().strip('"').strip("'")
         
         # If the URL itself is a feed, return it directly
-        if any(url.endswith(ext) for ext in ['.xml', '.rss', '_rss', '/_rss']):
+        if any(url.lower().endswith(ext) for ext in ['.xml', '.rss', '_rss', '/_rss', '/feed', '/feed/', '.feed']):
             if self.is_feed_url(url):
                 return [url]
-        
+    
         try:
             print(f"Searching for RSS feeds on {url}...")
             response = requests.get(url, headers=self.headers, timeout=15)
@@ -204,9 +204,19 @@ class RSSFinder:
             soup = BeautifulSoup(response.text, 'html.parser')
             feeds = set()
             
-            # Rest of your existing feed finding code...
+            # Look for RSS/Atom feed links
+            feed_links = soup.find_all('link', type=re.compile(r'application/(rss|atom)\+xml'))
+            for link in feed_links:
+                href = link.get('href', '')
+                if href:
+                    feeds.add(urljoin(url, href))
             
+            # If no feeds found but URL looks like a feed, try the URL itself
+            if not feeds and self.is_feed_url(url):
+                return [url]
+                
             return list(feeds)
+            
         except requests.exceptions.RequestException as e:
             # If the URL itself is a feed, return it even if website scraping fails
             if self.is_feed_url(url):
