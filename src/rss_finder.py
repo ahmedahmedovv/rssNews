@@ -316,11 +316,29 @@ class RSSFinder:
                         print(f"Could not parse date for entry: {entry.title}")
                         pub_date = now
                     
+                    # Get full content using multiple fallback options
+                    content = ''
+                    # Try to get the full content first
+                    if hasattr(entry, 'content'):
+                        content = entry.content[0].get('value', '')
+                    # If no content, try the full article text
+                    if not content and hasattr(entry, 'article_text'):
+                        content = entry.article_text
+                    # Try summary next
+                    if not content and hasattr(entry, 'summary_detail'):
+                        content = entry.summary_detail.get('value', '')
+                    # Fall back to regular summary
+                    if not content and hasattr(entry, 'summary'):
+                        content = entry.summary
+                    # Last resort: description
+                    if not content:
+                        content = entry.get('description', 'No content available')
+                    
                     recent_entries.append({
                         'title': entry.title,
                         'link': entry.link,
                         'published': pub_date.strftime('%Y-%m-%d %H:%M:%S UTC'),
-                        'description': entry.get('description', 'No description available')
+                        'description': content  # Store full content without truncation
                     })
                 
                 except Exception as e:
